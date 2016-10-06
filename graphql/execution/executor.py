@@ -358,6 +358,9 @@ def complete_object_value(exe_context, return_type, field_asts, info, result):
     """
     Complete an Object value by evaluating all sub-selections.
     """
+    if (getattr(result, "Issue", '')):
+        result = result.Issue
+
     if return_type.is_type_of and not return_type.is_type_of(result, exe_context.context_value, info):
         raise GraphQLError(
             u'Expected value of type "{}" but got: {}.'.format(return_type, type(result).__name__),
@@ -367,6 +370,9 @@ def complete_object_value(exe_context, return_type, field_asts, info, result):
     # Collect sub-fields to execute to complete this value.
     subfield_asts = exe_context.get_sub_fields(return_type, field_asts)
     return execute_fields(exe_context, return_type, result, subfield_asts)
+
+
+
 
 
 def complete_nonnull_value(exe_context, return_type, field_asts, info, result):
